@@ -43,7 +43,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 14px;
   }
 
   /* 🔥 SOLUCIÓN (NO TOCA NADA MÁS) */
@@ -89,6 +89,7 @@
     cursor: pointer;
     transition: 0.3s;
   }
+  
 
   @media (max-width: 600px) {
     h2 {
@@ -97,11 +98,14 @@
 
     .draggable {
       padding: 12px;
-      font-size: 14px;
+      font-size: 15px;
     }
 
-    .dropzone {
-      font-size: 10px;
+    .dropzone .draggable {
+      font-size: 8px;
+      padding: 0;
+      margin: 0;
+      background: none !important;
     }
   }
 </style>
@@ -170,7 +174,9 @@ function mostrarSiguiente() {
 
   div.addEventListener('click', () => {
     seleccionActual = div;
-    div.style.background = "lightgrey";
+    div.style.background = "black";
+    div.style.color = "white";
+    div.style.border = "2px solid white";
   });
 
   containerItems.appendChild(div);
@@ -196,22 +202,32 @@ dropzones.forEach(zone => {
       zone.classList.add('correct');
       zone.appendChild(seleccionActual);
 
+      // 🔥 RESET ESTILOS
+      seleccionActual.style.background = "none";
+      seleccionActual.style.color = "black";
+      seleccionActual.style.border = "none";
+
       opcionesRestantes.shift();
       seleccionActual = null;
 
       setTimeout(() => {
         mostrarSiguiente();
-      }, 400);
+      }, 500);
 
     } else {
       zone.classList.add('incorrect');
       zone.appendChild(seleccionActual);
 
+      // 🔥 RESET ESTILOS
+      seleccionActual.style.background = "none";
+      seleccionActual.style.color = "black";
+      seleccionActual.style.border = "none";
+
       seleccionActual = null;
 
       setTimeout(() => {
         reiniciarJuego();
-      }, 1000);
+      }, 1500);
     }
   });
 });
