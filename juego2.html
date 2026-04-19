@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Partes del Arma 2</title>
-<p id="mensaje" style="color: red; font-weight: bold; height: 20px;"></p>
 
 <style>
   body {
@@ -12,6 +12,7 @@
     color: white;
     font-size: 20px;
     background-color: #000000;
+    margin: 0;
   }
 
   h2 {
@@ -20,56 +21,54 @@
 
   .game-area {
     position: relative;
-    width: 800px;
+    width: 90%;
+    max-width: 800px;
     margin: auto;
   }
 
   .game-area img {
     width: 100%;
+    display: block;
   }
 
   .dropzone {
     position: absolute;
-    width: 90px;
-    height: 35px;
+    width: 11%;
+    height: 5%;
     border: 2px solid rgb(0, 0, 0);
     background: rgba(163, 163, 163, 0.3);
     border-radius: 6px;
     cursor: pointer;
-    transition: all 1.0s ease;
+    transition: all 0.5s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
   }
 
-  /* POSICIONES */
-  #zona1 { top: 104px; left: 250px; }
-  #zona2 { top: 89px; left: 350px; }
-  #zona3 { top: 298px; left: 533px; }
-  #zona4 { top: 398px; left: 380px; }
-  #zona5 { top: 540px; left: 230px; }
-  #zona6 { top: 316px; left: 54px; }
+  /* 🔥 TEXTO DENTRO DEL CUADRO */
+  .dropzone .draggable {
+    font-size: 10px;
+    padding: 0;
+    margin: 0;
+    background: none !important;
+  }
+
+  /* POSICIONES EN % (convertidas desde px) */
+  #zona1 { top: 16.2%; left: 31%; }
+  #zona2 { top: 14.4%; left: 44%; }
+  #zona3 { top: 45.8%; left: 66.8%; }
+  #zona4 { top: 61.1%; left: 47%; }
+  #zona5 { top: 83%; left: 29%; }
+  #zona6 { top: 48.6%; left: 7%; }
 
   .correct {
-    width: 90px;
-    height: 35px;
     background: rgba(30, 255, 0, 0.699);
-    border: 2px solid rgb(0, 0, 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    text-align: center;
   }
 
-    .incorrect {
-    width: 90px;
-    height: 35px;
-    font-size: 16px;
+  .incorrect {
     background: rgba(255, 0, 0, 0.699);
-    border: 2px solid rgb(0, 0, 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    text-align: center;
   }
 
   .items {
@@ -85,7 +84,24 @@
     color: black;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 1.0s ease;
+    transition: all 0.5s ease;
+  }
+
+  /* 📱 MOBILE */
+  @media (max-width: 600px) {
+    h2 {
+      font-size: 18px;
+    }
+
+    .draggable {
+      padding: 12px;
+      margin: 15px;
+      font-size: 13px;
+    }
+
+    .dropzone {
+      font-size: 9px;
+    }
   }
 </style>
 
@@ -105,14 +121,7 @@
   <div class="dropzone" id="zona6" data-match="p6"></div>
 </div>
 
-<div class="items">
-  <div class="draggable" id="p1">Uña estractora</div>
-  <div class="draggable" id="p2">Indicador cartucho</div>
-  <div class="draggable" id="p3">Cañon</div>
-  <div class="draggable" id="p4">Arco guardamonte</div>
-  <div class="draggable" id="p5">Cargador</div>
-  <div class="draggable" id="p6">Cola de castor</div>
-</div>
+<div class="items"></div>
 
 <script>
 const dropzones = document.querySelectorAll('.dropzone');
@@ -120,7 +129,6 @@ const containerItems = document.querySelector('.items');
 
 let seleccionActual = null;
 
-// LISTA DE OPCIONES
 let opciones = [
   { id: "p1", texto: "Uña estractora" },
   { id: "p2", texto: "Indicador cartucho" },
@@ -130,14 +138,12 @@ let opciones = [
   { id: "p6", texto: "Cola de castor" },
 ];
 
-// MEZCLAR (random)
 function mezclar(array) {
   return array.sort(() => Math.random() - 0.5);
 }
 
 let opcionesRestantes = mezclar([...opciones]);
 
-// MOSTRAR UNA OPCIÓN
 function mostrarSiguiente() {
   containerItems.innerHTML = "";
 
@@ -161,7 +167,6 @@ function mostrarSiguiente() {
   containerItems.appendChild(div);
 }
 
-// REINICIAR JUEGO
 function reiniciarJuego() {
   dropzones.forEach(zone => {
     zone.innerHTML = "";
@@ -174,7 +179,6 @@ function reiniciarJuego() {
   mostrarSiguiente();
 }
 
-// CLICK EN ZONAS
 dropzones.forEach(zone => {
   zone.addEventListener('click', () => {
     if (!seleccionActual) return;
@@ -183,19 +187,9 @@ dropzones.forEach(zone => {
       zone.classList.add('correct');
       zone.appendChild(seleccionActual);
 
-      seleccionActual.style.background = "none";
-      seleccionActual.style.margin = "0";
-      seleccionActual.style.padding = "0";
-      seleccionActual.style.cursor = "default";
-      seleccionActual.style.pointerEvents = "none";
-      seleccionActual.style.border = "none";
-
-      // ELIMINAR OPCIÓN USADA
       opcionesRestantes.shift();
-
       seleccionActual = null;
 
-      // mostrar siguiente después de un pequeño delay
       setTimeout(() => {
         mostrarSiguiente();
       }, 500);
@@ -204,16 +198,8 @@ dropzones.forEach(zone => {
       zone.classList.add('incorrect');
       zone.appendChild(seleccionActual);
 
-      seleccionActual.style.background = "none";
-      seleccionActual.style.margin = "0";
-      seleccionActual.style.padding = "0";
-      seleccionActual.style.cursor = "default";
-      seleccionActual.style.pointerEvents = "none";
-      seleccionActual.style.border = "none";
-
       seleccionActual = null;
 
-      // reiniciar
       setTimeout(() => {
         reiniciarJuego();
       }, 1500);
@@ -221,7 +207,6 @@ dropzones.forEach(zone => {
   });
 });
 
-// INICIO
 mostrarSiguiente();
 </script>
 
