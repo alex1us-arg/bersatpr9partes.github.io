@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Quiz</title>
+
+<style>
+  body {
+    font-family: Arial;
+    background: black;
+    color: white;
+    text-align: center;
+  }
+
+  .container {
+    max-width: 500px;
+    margin: 50px auto;
+  }
+
+  .opcion {
+    background: white;
+    color: black;
+    padding: 25px;
+    margin: 50px 0;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .opcion:hover {
+    background: lightgray;
+  }
+
+  .correcta {
+    background: green !important;
+    color: white;
+  }
+
+  .incorrecta {
+    background: red !important;
+    color: white;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+  <h2 id="pregunta"></h2>
+  <div id="opciones"></div>
+</div>
+
+<script>
+const preguntas = [
+    {
+    pregunta: "¿Qué es un Arma de fuego?",
+    opciones: [
+        "La que dispara proyectiles autopropulsados, granadas, munición química o munición explosiva. Se incluyen en esta definición los lanzallamas cuyo alcance sea superior a tres metros.",
+        "La que utiliza la energía de los gases producidos por la deflagración de pólvoras para lanzar un proyectil a distancia.",
+        "Es el arma de fuego o de lanzamiento que puede ser normalmente transportada y empleada por un hombre sin ayuda animal, mecánica o de otra persona."],
+    correcta: 1
+    },
+    {
+    pregunta: "Condición Blanca (Colores de Cooper) es:",
+    opciones: [
+        "Inconciente de los alrededores. Sin estado de alerta por sentirse seguro.",
+        "Conciencia general de los alrededores.",
+        "Se identifica una posible amenaza."],
+    correcta: 0
+    },
+    {
+    pregunta: "¿Qué es un Arma Portatil?",
+    opciones: [
+        "Es el arma de fuego o de lanzamiento que no puede normalmente ser transportada y empleada por un hombre sin la ayuda animal, mecánica o de otra persona.",
+        "La que utiliza la energía de los gases producidos por la deflagración de pólvoras para lanzar un proyectil a distancia.",
+        "Es el arma de fuego o de lanzamiento que puede ser normalmente transportada y empleada por un hombre sin ayuda animal, mecánica o de otra persona."],
+    correcta: 2
+    },
+    {
+    pregunta: "Simple acción:",
+    opciones: [
+        "No es necesario montar el martillo para efectuar el disparo.",
+        "Se trata de las armas en que es necesario oprimir el disparador por cada disparo y en el que el ciclo de carga y descarga se efectúa sin la intervención del tirador",
+        "Acción de llevar el martillo con el pulgar hacia atrás y dejarlo trabado."],
+    correcta: 2
+    },
+    {
+    pregunta: "Doble acción:",
+    opciones: [
+        "Acción de montar y desmontar el martillo al tocar la cola del disparador.",
+        "Son las que poseen un sistema de percusión lanzada",
+        "Es el arma de fuego portátil diseñada para ser empleada normalmente utilizando una sola mano, sin ser apoyada en otra parte del cuerpo."],
+    correcta: 0
+    },
+
+    {
+    pregunta: "Armas a repetición",
+    opciones: [
+        "Pueden efectuar un solo disparo por vez, es necesaria la apertura del arma y extracción manual de la vaina servida para reemplazarla por un nuevo cartucho y efectuar un nuevo disparo",
+        "Son aquellas en las que el ciclo de carga y descarga de la recamara se efectúa mecánicamente por acción del tirador, estando acumulados los cartuchos en un almacén cargador",
+        "Arma de hombro de características similares a las del fusil, cuyo cañón no sobrepasa los 560 mm de longitud"],
+    correcta: 1
+    },
+
+    {
+    pregunta: "Armas Semiautomáticas:",
+    opciones: [
+        "Acción de montar y desmontar el martillo al tocar la cola del disparador.",
+        "Se trata de las armas en que es necesario oprimir el disparador por cada disparo y en el que el ciclo de carga y descarga se efectúa sin la intervención del tirador",
+        " Pueden efectuar un solo disparo por vez, es necesaria la apertura del arma y extracción manual de la vaina servida para reemplazarla por un nuevo cartucho y efectuar un nuevo disparo"],
+    correcta: 1
+    }
+];
+
+let indice = 0;
+
+const preguntaEl = document.getElementById("pregunta");
+const opcionesEl = document.getElementById("opciones");
+
+function cargarPregunta() {
+  opcionesEl.innerHTML = "";
+
+  const actual = preguntas[indice];
+  preguntaEl.textContent = actual.pregunta;
+
+  actual.opciones.forEach((opcion, i) => {
+    const div = document.createElement("div");
+    div.classList.add("opcion");
+    div.textContent = opcion;
+
+    div.addEventListener("click", () => {
+      if (i === actual.correcta) {
+        div.classList.add("correcta");
+
+        setTimeout(() => {
+          indice++;
+          if (indice >= preguntas.length) {
+            preguntaEl.textContent = "🎉 Terminaste!";
+            opcionesEl.innerHTML = "";
+          } else {
+            cargarPregunta();
+          }
+        }, 800);
+
+      } else {
+        div.classList.add("incorrecta");
+
+        setTimeout(() => {
+          indice = 0; // 🔥 reinicia
+          cargarPregunta();
+        }, 1000);
+      }
+
+      // bloquear clics
+      Array.from(opcionesEl.children).forEach(op => {
+        op.style.pointerEvents = "none";
+      });
+    });
+
+    opcionesEl.appendChild(div);
+  });
+}
+
+cargarPregunta();
+</script>
+
+</body>
+</html>
