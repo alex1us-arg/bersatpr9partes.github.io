@@ -9,7 +9,9 @@
   body {
     font-family: Arial;
     text-align: center;
-    background-color: #f0f0f0;
+    color: white;
+    font-size: 20px;
+    background-color: #000000;
   }
 
   h2 {
@@ -79,7 +81,8 @@
     padding: 20px;
     margin: 30px;
     font-size: 14px;
-    background: rgba(134, 134, 134, 0.699);
+    background: rgb(255, 255, 255);
+    color: black;
     border-radius: 8px;
     cursor: pointer;
     transition: all 1.0s ease;
@@ -139,7 +142,7 @@ function mostrarSiguiente() {
   containerItems.innerHTML = "";
 
   if (opcionesRestantes.length === 0) {
-    containerItems.innerHTML = "<b>🎉 Felicidades capo te sacaste un 10! 🎉</b>";
+    containerItems.innerHTML = "<b>🎉 Aprobaste:) 🎉</b>";
     return;
   }
 
@@ -152,7 +155,7 @@ function mostrarSiguiente() {
 
   div.addEventListener('click', () => {
     seleccionActual = div;
-    div.style.border = "2px solid black";
+    div.style.background = "lightgrey";
   });
 
   containerItems.appendChild(div);
