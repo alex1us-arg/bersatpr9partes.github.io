@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partes del Arma 3</title>
+
+<style>
+  body {
+    font-family: Arial;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    background-color: #000000;
+    margin: 0;
+  }
+
+  h2 {
+    margin: 10px;
+  }
+
+  .game-area {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    margin: auto;
+  }
+
+  .game-area img {
+    width: 100%;
+    display: block;
+  }
+
+  .dropzone {
+    position: absolute;
+    width: 11%;
+    height: 5%;
+    border: 2px solid rgb(0, 0, 0);
+    background: rgba(163, 163, 163, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .dropzone .draggable {
+    font-size: 10px;
+    padding: 0;
+    margin: 0;
+    background: none !important;
+  }
+
+  #zona1 { top: 10.2%; left: 17%; }
+  #zona2 { top: 23%; left: 79%; }
+  #zona3 { top: 31%; left: 15.5%; }
+  #zona4 { top: 68%; left: 53.8%; }
+  #zona5 { top: 68.3%; left: 8.8%; }
+
+  .correct {
+    background: rgba(30, 255, 0, 0.699);
+  }
+
+  .incorrect {
+    background: rgba(255, 0, 0, 0.699);
+  }
+
+  .items {
+    margin-top: 20px;
+  }
+
+  .draggable {
+    display: inline-block;
+    padding: 20px;
+    margin: 30px;
+    font-size: 14px;
+    background: rgb(255, 255, 255);
+    color: black;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+  }
+
+  @media (max-width: 600px) {
+    h2 {
+      font-size: 18px;
+    }
+
+    .draggable {
+      padding: 12px;
+      font-size: 15px;
+    }
+
+    .dropzone .draggable {
+      font-size: 8px;
+      padding: 0;
+      margin: 0;
+      background: none !important;
+    }
+  }
+
+</style>
+
+</head>
+<body>
+
+<h2>Partes de la Bersa TPR9</h2>
+
+<div class="game-area">
+  <img src="./arma_plantilla3.png">
+
+  <div class="dropzone" id="zona1" data-match="p1"></div>
+  <div class="dropzone" id="zona2" data-match="p2"></div>
+  <div class="dropzone" id="zona3" data-match="p3"></div>
+  <div class="dropzone" id="zona4" data-match="p4"></div>
+  <div class="dropzone" id="zona5" data-match="p5"></div>
+</div>
+
+<div class="items"></div>
+
+<script>
+const dropzones = document.querySelectorAll('.dropzone');
+const containerItems = document.querySelector('.items');
+
+let seleccionActual = null;
+
+let opciones = [
+  { id: "p1", texto: "Corredera" },
+  { id: "p2", texto: "Cañon" },
+  { id: "p3", texto: "Muelle recuperador" },
+  { id: "p4", texto: "Armazón" },
+  { id: "p5", texto: "Cargador" },
+];
+
+function mezclar(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+let opcionesRestantes = mezclar([...opciones]);
+
+function mostrarSiguiente() {
+  containerItems.innerHTML = "";
+
+  if (opcionesRestantes.length === 0) {
+    containerItems.innerHTML = "<b>🎉 Aprobaste:) 🎉</b>";
+    return;
+  }
+
+  const opcion = opcionesRestantes[0];
+
+  const div = document.createElement("div");
+  div.classList.add("draggable");
+  div.id = opcion.id;
+  div.textContent = opcion.texto;
+
+  div.addEventListener('click', () => {
+    seleccionActual = div;
+    div.style.background = "black";
+    div.style.color = "white";
+    div.style.border = "2px solid white";
+  });
+
+  containerItems.appendChild(div);
+}
+
+function reiniciarJuego() {
+  dropzones.forEach(zone => {
+    zone.innerHTML = "";
+    zone.classList.remove('correct', 'incorrect');
+  });
+
+  opcionesRestantes = mezclar([...opciones]);
+  seleccionActual = null;
+
+  mostrarSiguiente();
+}
+
+dropzones.forEach(zone => {
+  zone.addEventListener('click', () => {
+    if (!seleccionActual) return;
+
+    if (zone.dataset.match === seleccionActual.id) {
+      zone.classList.add('correct');
+      zone.appendChild(seleccionActual);
+
+      // 🔥 RESET ESTILOS
+      seleccionActual.style.background = "none";
+      seleccionActual.style.color = "black";
+      seleccionActual.style.border = "none";
+
+      opcionesRestantes.shift();
+      seleccionActual = null;
+
+      setTimeout(() => {
+        mostrarSiguiente();
+      }, 500);
+
+    } else {
+      zone.classList.add('incorrect');
+      zone.appendChild(seleccionActual);
+
+      // 🔥 RESET ESTILOS
+      seleccionActual.style.background = "none";
+      seleccionActual.style.color = "black";
+      seleccionActual.style.border = "none";
+
+      seleccionActual = null;
+
+      setTimeout(() => {
+        reiniciarJuego();
+      }, 1500);
+    }
+  });
+});
+
+mostrarSiguiente();
+</script>
+
+</body>
+</html>
