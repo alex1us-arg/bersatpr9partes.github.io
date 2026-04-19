@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Partes del Arma 2</title>
 
+<div class="menu">
+  <div class="btn" onclick="irAJuego('juego3.html')">
+    Siguiente
+  </div>
+
 <style>
   body {
     font-family: Arial;
@@ -103,6 +108,24 @@
     }
   }
 
+    .btn {
+    display: none;
+    width: 200px;
+    margin: 50px auto;
+    padding: 10px;
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .btn:hover {
+    background: #45a049;
+    transform: scale(1.05);
+  }
+
 </style>
 
 </head>
@@ -126,6 +149,7 @@
 <script>
 const dropzones = document.querySelectorAll('.dropzone');
 const containerItems = document.querySelector('.items');
+const boton = document.querySelector('.btn');
 
 let seleccionActual = null;
 
@@ -148,7 +172,7 @@ function mostrarSiguiente() {
   containerItems.innerHTML = "";
 
   if (opcionesRestantes.length === 0) {
-    containerItems.innerHTML = "<b>🎉 Aprobaste:) 🎉</b>";
+    boton.style.display = "block"; // mostrar botón
     return;
   }
 
@@ -220,7 +244,9 @@ dropzones.forEach(zone => {
 });
 
 mostrarSiguiente();
+function irAJuego(pagina) {
+  window.location.href = pagina;
+}
 </script>
-
 </body>
 </html>
